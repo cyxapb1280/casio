@@ -1,16 +1,70 @@
-<h2>{{display$ | async}}</h2>
+<div class="calculator">
+  <header class="header">
+    <span class="header__logo">
+      CASIO
+    </span>
 
-<button #num1 value="1" (click)="number$.next(num1.value)">1</button>
-<button #num2 value="2" (click)="number$.next(num2.value)">2</button>
-<button #num3 value="3" (click)="number$.next(num3.value)">3</button>
-<button #num4 value="4" (click)="number$.next(num4.value)">4</button>
-<button #num5 value="5" (click)="number$.next(num5.value)">5</button>
-<button #num6 value="6" (click)="number$.next(num6.value)">6</button>
-<button #num7 value="7" (click)="number$.next(num7.value)">7</button>
-<button #num8 value="8" (click)="number$.next(num8.value)">8</button>
-<button #num9 value="9" (click)="number$.next(num9.value)">9</button>
-<button #num0 value="0" (click)="number$.next(num0.value)">0</button>
-<button #operPlus value="plus" (click)="operator$.next(operPlus.value)">+</button>
-<button #operMinus value="minus" (click)="operator$.next(operMinus.value)">-</button>
-<button #operEqual value="equal" (click)="operator$.next(operEqual.value)">=</button>
+    <div class="header__buttery sun-buttery">
+      <section class="sun-buttery__container">
+        <div class="sun-buttery__item"></div>
+        <div class="sun-buttery__item"></div>
+        <div class="sun-buttery__item"></div>
+        <div class="sun-buttery__item"></div>
+        <div class="sun-buttery__item"></div>
+      </section>
+
+      <div class="sun-buttery__sub-label">
+        TWO WAY POWER
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="screen">
+      {{display$ | async}}
+    </div>
+
+    <div class="keyboard">
+      <section class="keyboard__first-section">
+        <div class="keyboard__label">SL-300SV</div>
+
+        <div class="keyboard__container" *ngFor="let key of firstSectionKeys">
+          <button class="button"
+                  (click)="keyDown$.next({type: key.type, value: key.value})"
+                  [innerHtml]="key.label">
+          </button>
+        </div>
+      </section>
+
+      <section class="keyboard__main-section">
+        <div class="keyboard__container" *ngFor="let key of mainSectionKeys">
+          <button class="button"
+                  (click)="keyDown$.next({type: key.type, value: key.value})"
+                  [innerHtml]="key.label">
+          </button>
+        </div>
+      </section>
+
+      <section class="keyboard__last-section">
+        <div class="keyboard__sub-section">
+          <div class="keyboard__container" *ngFor="let key of lastSectionKeys">
+            <button class="button"
+                    (click)="keyDown$.next({type: key.type, value: key.value})"
+                    [innerHtml]="key.label">
+            </button>
+          </div>
+        </div>
+
+        <div class="keyboard__sub-section">
+          <div class="keyboard__container">
+            <button class="button button--tall"
+                    (click)="keyDown$.next({type: tallKey.type, value: tallKey.value})"
+                    [innerHtml]="tallKey.label">
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
 
