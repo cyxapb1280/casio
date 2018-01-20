@@ -1,0 +1,16 @@
+<h2>{{display$ | async}}</h2>
+
+<button #num1 value="1" (click)="number$.next(num1.value)">1</button>
+<button #num2 value="2" (click)="number$.next(num2.value)">2</button>
+<button #num3 value="3" (click)="number$.next(num3.value)">3</button>
+<button #num4 value="4" (click)="number$.next(num4.value)">4</button>
+<button #num5 value="5" (click)="number$.next(num5.value)">5</button>
+<button #num6 value="6" (click)="number$.next(num6.value)">6</button>
+<button #num7 value="7" (click)="number$.next(num7.value)">7</button>
+<button #num8 value="8" (click)="number$.next(num8.value)">8</button>
+<button #num9 value="9" (click)="number$.next(num9.value)">9</button>
+<button #num0 value="0" (click)="number$.next(num0.value)">0</button>
+<button #operPlus value="plus" (click)="operator$.next(operPlus.value)">+</button>
+<button #operMinus value="minus" (click)="operator$.next(operMinus.value)">-</button>
+<button #operEqual value="equal" (click)="operator$.next(operEqual.value)">=</button>
+
