@@ -50,7 +50,9 @@
           <div class="keyboard__container" *ngFor="let key of lastSectionKeys">
             <button class="button"
                     (click)="keyDown$.next({type: key.type, value: key.value})"
-                    [innerHtml]="key.label">
+                    [innerHtml]="key.label"
+                    [ngClass]="{'button--special': key.isSpecial}"
+                    [id]="key.id">
             </button>
           </div>
         </div>
@@ -64,6 +66,12 @@
           </div>
         </div>
       </section>
+
+      <div class="keyboard__labels">
+        <label class="keyboard__on-label" for="clear-all">
+          ON
+        </label>
+      </div>
     </div>
   </main>
 </div>

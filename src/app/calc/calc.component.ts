@@ -31,7 +31,8 @@ export class CalcComponent implements OnInit {
   lastSectionKeys = KEYS.slice(17, 25);
   tallKey = KEYS[KEYS.length - 1];
 
-  keyDown$ = new Subject().map(({ type, value }) => ({ type: type, payload: value }));
+  keyDown$ = new Subject()
+    .map(({ type, value }) => ({ type: type, payload: value }));
 
   display$;
 

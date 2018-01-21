@@ -65,9 +65,13 @@
   height: 90px;
   background-color: #d3dfdf;
   font-family: 'Digital', sans-serif;
-  line-height: 100%;
+  line-height: 90px;
   font-size: 60px;
   vertical-align: middle;
+  padding: 0 10px;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .keyboard {
@@ -127,6 +131,17 @@
       }
     }
   }
+
+  &__labels {
+    display: flex;
+
+    .keyboard__on-label {
+      width: 20%;
+      text-align: center;
+      font-size: 10px;
+      font-weight: bold;
+    }
+  }
 }
 
 .button {
@@ -139,15 +154,19 @@
   font-size: 20px;
   line-height: 50px;
   box-shadow: 3px 3px 0 0 #212025;
-  font-family: 'Calc', sans-serif;
+  font-family: 'Armata', sans-serif;
 
   &:active {
-    box-shadow: 3px 3px 0 0 #38373e,
-               inset 3px 3px 0 0 #d2d4d8;
+    box-shadow: none;
+    transform: translate(3px, 3px);
   }
 
   &--tall {
     height: 100%;
     line-height: 100%;
+  }
+
+  &--special {
+    background-color: #a25067;
   }
 }
