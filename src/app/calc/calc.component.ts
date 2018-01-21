@@ -31,8 +31,7 @@ export class CalcComponent implements OnInit {
   lastSectionKeys = KEYS.slice(17, 25);
   tallKey = KEYS[KEYS.length - 1];
 
-  keyDown$ = new Subject()
-    .map(({ type, value }) => ({ type: type, payload: value }));
+  keyDown$ = new Subject();
 
   display$;
 
@@ -42,9 +41,11 @@ export class CalcComponent implements OnInit {
       return state.calc.display;
     });
 
-    this.keyDown$.subscribe((action) => {
-      store.dispatch(action);
-    });
+    this.keyDown$
+      .map(({ type, value }) => ({ type: type, payload: value }))
+      .subscribe((action) => {
+        store.dispatch(action);
+      });
   }
 
   ngOnInit() {
