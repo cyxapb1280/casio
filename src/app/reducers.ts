@@ -7,6 +7,8 @@ export const RESULT = 'RESULT';
 export const CLEAR = 'CLEAR';
 export const CLEAR_ALL = 'CLEAR_ALL';
 export const OFF = 'OFF';
+export const FLOAT = 'FLOAT';
+export const PERCENT = 'PERCENT';
 
 const defaultState: CalcState = {
   operandA: null,
@@ -14,7 +16,9 @@ const defaultState: CalcState = {
   operator: null,
   display: null,
   currentOperand: 'A',
-  enabled: false
+  enabled: false,
+  floatMode: false,
+  percentBase: null
 };
 
 export function calcReducer(oldState: CalcState = defaultState, {type, payload}) {
@@ -44,6 +48,12 @@ export function calcReducer(oldState: CalcState = defaultState, {type, payload})
     case RESULT:
       return processResult(oldState);
 
+    case FLOAT:
+      return processFloat(oldState);
+
+    case PERCENT:
+      return processPercents(oldState);
+
     default:
       return oldState;
   }
@@ -52,17 +62,17 @@ export function calcReducer(oldState: CalcState = defaultState, {type, payload})
 function processNumber(oldState: CalcState, payload) {
   const state = Object.assign({}, oldState);
 
-  payload = Number(payload);
-
   if (state.currentOperand === 'A') {
-    state.operandA = calcNumber(state.operandA, payload);
+    state.operandA = calcNumber(state.operandA, payload, state.floatMode);
 
     state.display = state.operandA;
   } else if (state.currentOperand === 'B') {
-    state.operandB = calcNumber(state.operandB, payload);
+    state.operandB = calcNumber(state.operandB, payload, state.floatMode);
 
     state.display = state.operandB;
   }
+
+  state.floatMode = false;
 
   return state;
 }
@@ -88,6 +98,8 @@ function processBinaryOperator(oldState: CalcState, payload) {
     state.display = state.operandA;
   }
 
+  state.floatMode = false;
+
   return state;
 }
 
@@ -104,6 +116,8 @@ function processOperator(oldState: CalcState, payload) {
     state.display = state.operandB;
   }
 
+  state.floatMode = false;
+
   return state;
 }
 
@@ -119,6 +133,8 @@ function processClear(oldState: CalcState) {
 
     state.display = 0;
   }
+
+  state.floatMode = false;
 
   return state;
 }
@@ -138,6 +154,7 @@ function processClearAll(oldState: CalcState) {
   state.operator = null;
   state.display = 0;
   state.currentOperand = 'A';
+  state.floatMode = false;
 
   return state;
 }
@@ -158,6 +175,25 @@ function processResult(oldState: CalcState) {
   state.currentOperand = 'A';
   state.display = state.operandA;
   state.operator = null;
+  state.floatMode = false;
+
+  return state;
+}
+
+function processPercents(oldState: CalcState) {
+  const state = Object.assign({}, oldState);
+
+  if (state.currentOperand === 'B' && state.operandA !== null && state.operandB !== null) {
+    state.operandB = state.operandA / 100 * state.operandB;
+  }
+
+  return processResult(state);
+}
+
+function processFloat(oldState: CalcState) {
+  const state = Object.assign({}, oldState);
+
+  state.floatMode = true;
 
   return state;
 }
@@ -188,6 +224,14 @@ function calcOperation(x, operator) {
   }
 }
 
-function calcNumber(x, number) {
-  return x === null ? number : x * 10 + number;
+function calcNumber(x, number, floatMode) {
+  let numberStr;
+
+  if (floatMode) {
+    numberStr = x === null ? '0.' + number : x + '.' + number;
+  } else {
+    numberStr = x === null ? number : x + number;
+  }
+
+  return Number(numberStr);
 }

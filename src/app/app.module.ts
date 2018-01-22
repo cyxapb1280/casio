@@ -8,13 +8,18 @@ import { CalcComponent } from './calc/calc.component';
 
 import { StoreModule } from '@ngrx/store';
 import { calcReducer } from './reducers';
+import { KeyboardComponent } from './keyboard/keyboard.component';
+import { CalcNumberPipe } from './calc-number.pipe';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ScreenComponent,
-    CalcComponent
+    CalcComponent,
+    KeyboardComponent,
+    KeyboardComponent,
+    CalcNumberPipe
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { BINARY_OPERATOR, CLEAR, CLEAR_ALL, NUMBER, OFF, OPERATOR, RESULT } from '../reducers';
+import {BINARY_OPERATOR, CLEAR, CLEAR_ALL, FLOAT, NUMBER, OFF, OPERATOR, PERCENT, RESULT} from '../reducers';
 
 interface Key {
   label: string;
@@ -16,7 +16,7 @@ export const KEYS: Array<Key> = [
   { label: 'M-', value: 'mMinus', type: OPERATOR },
   { label: 'M+', value: 'mPlus', type: OPERATOR },
   { label: '&divide;', value: 'divide', type: BINARY_OPERATOR },
-  { label: '&#37;', value: 'percent', type: OPERATOR },
+  { label: '&#37;', value: 'percent', type: PERCENT },
   { label: '7', value: '7', type: NUMBER },
   { label: '8', value: '8', type: NUMBER },
   { label: '9', value: '9', type: NUMBER },
@@ -32,7 +32,7 @@ export const KEYS: Array<Key> = [
   { label: '3', value: '3', type: NUMBER },
   { label: 'AC', value: 'clearAll', type: CLEAR_ALL, isSpecial: true, id: 'clear-all' },
   { label: '0', value: '0', type: NUMBER },
-  { label: '&middot;', value: 'dot', type: '' },
+  { label: '&middot;', value: '.', type: FLOAT },
   { label: '=', value: 'equal', type: RESULT },
   { label: '+', value: 'plus', type: BINARY_OPERATOR },
 ];

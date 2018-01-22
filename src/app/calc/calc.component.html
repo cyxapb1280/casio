@@ -21,58 +21,10 @@
 
   <main>
     <div class="screen">
-      {{display$ | async}}
+      {{display$ | async | calcNumber}}
     </div>
 
-    <div class="keyboard">
-      <section class="keyboard__first-section">
-        <div class="keyboard__label">SL-300SV</div>
-
-        <div class="keyboard__container" *ngFor="let key of firstSectionKeys">
-          <button class="button"
-                  (click)="keyDown$.next({type: key.type, value: key.value})"
-                  [innerHtml]="key.label">
-          </button>
-        </div>
-      </section>
-
-      <section class="keyboard__main-section">
-        <div class="keyboard__container" *ngFor="let key of mainSectionKeys">
-          <button class="button"
-                  (click)="keyDown$.next({type: key.type, value: key.value})"
-                  [innerHtml]="key.label">
-          </button>
-        </div>
-      </section>
-
-      <section class="keyboard__last-section">
-        <div class="keyboard__sub-section">
-          <div class="keyboard__container" *ngFor="let key of lastSectionKeys">
-            <button class="button"
-                    (click)="keyDown$.next({type: key.type, value: key.value})"
-                    [innerHtml]="key.label"
-                    [ngClass]="{'button--special': key.isSpecial}"
-                    [id]="key.id">
-            </button>
-          </div>
-        </div>
-
-        <div class="keyboard__sub-section">
-          <div class="keyboard__container">
-            <button class="button button--tall"
-                    (click)="keyDown$.next({type: tallKey.type, value: tallKey.value})"
-                    [innerHtml]="tallKey.label">
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <div class="keyboard__labels">
-        <label class="keyboard__on-label" for="clear-all">
-          ON
-        </label>
-      </div>
-    </div>
+    <keyboard></keyboard>
   </main>
 </div>
 

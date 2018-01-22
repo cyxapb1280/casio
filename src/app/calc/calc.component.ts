@@ -1,11 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { NUMBER, BINARY_OPERATOR, OPERATOR } from '../reducers';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/merge';
-import { KEYS } from './keys';
+import {KeyboardComponent} from '../keyboard/keyboard.component';
 
 export interface CalcState {
   operandA: number;
@@ -14,6 +11,8 @@ export interface CalcState {
   operator: string;
   display: number;
   enabled: boolean;
+  floatMode: boolean;
+  percentBase: number;
 }
 
 interface AppState {
@@ -25,29 +24,26 @@ interface AppState {
   templateUrl: './calc.component.html',
   styleUrls: ['./calc.component.scss']
 })
-export class CalcComponent implements OnInit {
-  firstSectionKeys = KEYS.slice(0, 2);
-  mainSectionKeys = KEYS.slice(2, 17);
-  lastSectionKeys = KEYS.slice(17, 25);
-  tallKey = KEYS[KEYS.length - 1];
-
-  keyDown$ = new Subject();
-
+export class CalcComponent implements OnInit, AfterViewInit {
   display$;
 
-  constructor(private store: Store<AppState>) {
-    this.display$ = store.select<number>(state => {
-      console.log(state.calc);
-      return state.calc.display;
-    });
+  @ViewChild(KeyboardComponent) keyboard;
 
-    this.keyDown$
-      .map(({ type, value }) => ({ type: type, payload: value }))
-      .subscribe((action) => {
-        store.dispatch(action);
-      });
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
+    this.display$ = this.store.select<number>(state => {
+      console.log(state.calc);
+      return state.calc.display;
+    });
+  }
+
+  ngAfterViewInit() {
+    this.keyboard.keyDown$
+      .map(({ type, value }) => ({ type: type, payload: value }))
+      .subscribe((action) => {
+        this.store.dispatch(action);
+      });
   }
 }
