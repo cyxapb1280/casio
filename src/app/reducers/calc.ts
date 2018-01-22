@@ -1,4 +1,4 @@
-import {CalcState} from './calc/calc.component';
+import {CalcState} from '../calc/calc.component';
 
 export const NUMBER = 'NUMBER';
 export const OPERATOR = 'OPERATOR';
@@ -9,6 +9,10 @@ export const CLEAR_ALL = 'CLEAR_ALL';
 export const OFF = 'OFF';
 export const FLOAT = 'FLOAT';
 export const PERCENT = 'PERCENT';
+export const MEMORY_CLEAR = 'MEMORY_CLEAR';
+export const MEMORY_RECALL = 'MEMORY_RECALL';
+export const MEMORY_PLUS = 'MEMORY_PLUS';
+export const MEMORY_MINUS = 'MEMORY_MINUS';
 
 const defaultState: CalcState = {
   operandA: null,
@@ -18,7 +22,7 @@ const defaultState: CalcState = {
   currentOperand: 'A',
   enabled: false,
   floatMode: false,
-  percentBase: null
+  memory: null
 };
 
 export function calcReducer(oldState: CalcState = defaultState, {type, payload}) {
@@ -53,6 +57,18 @@ export function calcReducer(oldState: CalcState = defaultState, {type, payload})
 
     case PERCENT:
       return processPercents(oldState);
+
+    case MEMORY_CLEAR:
+      return processMemoryClear(oldState);
+
+    case MEMORY_RECALL:
+      return processMemoryRecall(oldState);
+
+    case MEMORY_PLUS:
+      return processMemoryOperation(oldState, payload);
+
+    case MEMORY_MINUS:
+      return processMemoryOperation(oldState, payload);
 
     default:
       return oldState;
@@ -198,6 +214,53 @@ function processFloat(oldState: CalcState) {
   return state;
 }
 
+function processMemoryClear(oldState: CalcState) {
+  const state = Object.assign({}, oldState);
+
+  state.memory = null;
+
+  return state;
+}
+
+function processMemoryRecall(oldState: CalcState) {
+  const state = Object.assign({}, oldState);
+
+  if (state.memory === null) {
+    return oldState;
+  }
+
+  if (state.currentOperand === 'A') {
+    state.operandA = state.memory;
+
+    state.display = state.operandA;
+  } else if (state.currentOperand === 'B') {
+    state.operandB = state.memory;
+
+    state.display = state.operandB;
+  }
+
+  state.floatMode = false;
+
+  return state;
+}
+
+function processMemoryOperation(oldState: CalcState, payload) {
+  const state = Object.assign({}, oldState);
+
+  if (state.memory === null) {
+    state.memory = 0;
+  }
+
+  if (state.currentOperand === 'A') {
+    state.memory = calcBinaryOperation(state.memory, state.operandA, payload);
+  } else if (state.currentOperand === 'B') {
+    state.memory = calcBinaryOperation(state.memory, state.operandB, payload);
+  }
+
+  return state;
+}
+
+
 function calcBinaryOperation(a, b, operator) {
   switch (operator) {
     case 'plus':
@@ -233,5 +296,5 @@ function calcNumber(x, number, floatMode) {
     numberStr = x === null ? number : x + number;
   }
 
-  return Number(numberStr);
+  return Number(numberStr) <= Number.MAX_VALUE ? Number(numberStr) : x;
 }

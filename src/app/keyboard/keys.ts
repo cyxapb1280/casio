@@ -1,4 +1,7 @@
-import {BINARY_OPERATOR, CLEAR, CLEAR_ALL, FLOAT, NUMBER, OFF, OPERATOR, PERCENT, RESULT} from '../reducers';
+import {
+  BINARY_OPERATOR, CLEAR, CLEAR_ALL, FLOAT, MEMORY_CLEAR, MEMORY_MINUS, MEMORY_PLUS, MEMORY_RECALL, NUMBER, OFF, OPERATOR, PERCENT,
+  RESULT
+} from '../reducers/calc';
 
 interface Key {
   label: string;
@@ -11,10 +14,10 @@ interface Key {
 export const KEYS: Array<Key> = [
   { label: '&radic;', value: 'sqrt', type: OPERATOR },
   { label: 'OFF', value: 'off', type: OFF },
-  { label: 'MC', value: 'mc', type: OPERATOR },
-  { label: 'MR', value: 'mr', type: OPERATOR },
-  { label: 'M-', value: 'mMinus', type: OPERATOR },
-  { label: 'M+', value: 'mPlus', type: OPERATOR },
+  { label: 'MC', value: 'mc', type: MEMORY_CLEAR },
+  { label: 'MR', value: 'mr', type: MEMORY_RECALL },
+  { label: 'M-', value: 'minus', type: MEMORY_MINUS },
+  { label: 'M+', value: 'plus', type: MEMORY_PLUS },
   { label: '&divide;', value: 'divide', type: BINARY_OPERATOR },
   { label: '&#37;', value: 'percent', type: PERCENT },
   { label: '7', value: '7', type: NUMBER },

@@ -7,7 +7,7 @@ import { ScreenComponent } from './screen/screen.component';
 import { CalcComponent } from './calc/calc.component';
 
 import { StoreModule } from '@ngrx/store';
-import { calcReducer } from './reducers';
+import { calcReducer } from './reducers/calc';
 import { KeyboardComponent } from './keyboard/keyboard.component';
 import { CalcNumberPipe } from './calc-number.pipe';
 

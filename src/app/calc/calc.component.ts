@@ -12,7 +12,7 @@ export interface CalcState {
   display: number;
   enabled: boolean;
   floatMode: boolean;
-  percentBase: number;
+  memory: number;
 }
 
 interface AppState {
@@ -26,6 +26,7 @@ interface AppState {
 })
 export class CalcComponent implements OnInit, AfterViewInit {
   display$;
+  memory$;
 
   @ViewChild(KeyboardComponent) keyboard;
 
@@ -36,6 +37,10 @@ export class CalcComponent implements OnInit, AfterViewInit {
     this.display$ = this.store.select<number>(state => {
       console.log(state.calc);
       return state.calc.display;
+    });
+
+    this.memory$ = this.store.select<boolean>(state => {
+      return state.calc.memory !== null;
     });
   }
 

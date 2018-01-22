@@ -52,24 +52,3 @@
     font-weight: bold;
   }
 }
-
-.screen {
-  margin-top: 15px;
-  margin-bottom: 25px;
-  width: 100%;
-  box-sizing: border-box;
-  border-radius: 5px;
-  border: 3px solid #33393b;
-  border-bottom-color: transparent;
-  box-shadow: 0 0 0 10px #5b6569;
-  height: 90px;
-  background-color: #d3dfdf;
-  font-family: 'Digital', sans-serif;
-  line-height: 90px;
-  font-size: 60px;
-  vertical-align: middle;
-  padding: 0 10px;
-  text-align: right;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}

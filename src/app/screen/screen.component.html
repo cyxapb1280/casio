@@ -1,3 +1,7 @@
-<div>
-  {{info}}
+<div class="screen">
+      <span class="screen__memory" *ngIf="isMemoryEnabled">
+        M
+      </span>
+
+  {{info | calcNumber}}
 </div>
