@@ -35,7 +35,6 @@ export class CalcComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.display$ = this.store.select<number>(state => {
-      console.log(state.calc);
       return state.calc.display;
     });
 
