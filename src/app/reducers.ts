@@ -1,4 +1,4 @@
-import { CalcState } from './calc/calc.component';
+import {CalcState} from './calc/calc.component';
 
 export const NUMBER = 'NUMBER';
 export const OPERATOR = 'OPERATOR';
@@ -17,116 +17,152 @@ const defaultState: CalcState = {
   enabled: false
 };
 
-export function calcReducer(oldState: CalcState = defaultState, { type, payload }) {
-  const state = Object.assign({}, oldState);
-
-  if (!state.enabled && type !== CLEAR_ALL) {
+export function calcReducer(oldState: CalcState = defaultState, {type, payload}) {
+  if (!oldState.enabled && type !== CLEAR_ALL) {
     return oldState;
   }
 
   switch (type) {
     case NUMBER:
-      payload = Number(payload);
-
-      if (state.currentOperand === 'A') {
-        state.operandA = processNumber(state.operandA, payload);
-
-        state.display = state.operandA;
-      } else if (state.currentOperand === 'B') {
-        state.operandB = processNumber(state.operandB, payload);
-
-        state.display = state.operandB;
-      }
-
-      return state;
+      return processNumber(oldState, payload);
 
     case BINARY_OPERATOR:
-      if (state.operandA === null) {
-        return state;
-      }
-
-      if (state.operandA !== null && state.operandB === null) {
-        state.operator = payload;
-
-        state.currentOperand = 'B';
-        state.display = state.operandA;
-      }
-
-      if (state.operandA !== null && state.operandB !== null && state.operator !== null) {
-        state.operandA = processBinaryOperation(state.operandA, state.operandB, state.operator);
-        state.operandB = null;
-        state.currentOperand = 'B';
-        state.display = state.operandA;
-      }
-
-      return state;
+      return processBinaryOperator(oldState, payload);
 
     case OPERATOR:
-      if (state.currentOperand === 'A') {
-        state.operandA = processOperation(state.operandA, payload);
-
-        state.display = state.operandA;
-      } else if (state.currentOperand === 'B') {
-        state.operandB = processOperation(state.operandB, payload);
-
-        state.display = state.operandB;
-      }
-
-      return state;
+      return processOperator(oldState, payload);
 
     case CLEAR:
-      if (state.currentOperand === 'A') {
-        state.operandA = null;
-
-        state.display = 0;
-      } else if (state.currentOperand === 'B') {
-        state.operandB = null;
-
-        state.display = 0;
-      }
-
-      return state;
+      return processClear(oldState);
 
     case CLEAR_ALL:
-      if (!state.enabled) {
-        state.enabled = true;
-        state.display = 0;
-
-        return state;
-      }
-
-      state.operandA = 0;
-      state.operandB = null;
-      state.operator = null;
-      state.display = 0;
-      state.currentOperand = 'A';
-
-      return state;
+      return processClearAll(oldState);
 
     case OFF:
-      Object.assign(state, defaultState);
+      return processOff(oldState);
 
-      return state;
     case RESULT:
-      if (!state.operator) {
-        return state;
-      }
-
-      state.operandA = processBinaryOperation(state.operandA, state.operandB, state.operator);
-      state.operandB = null;
-      state.currentOperand = 'B';
-      state.display = state.operandA;
-      state.operator = null;
-
-      return state;
+      return processResult(oldState);
 
     default:
       return oldState;
   }
 }
 
+function processNumber(oldState: CalcState, payload) {
+  const state = Object.assign({}, oldState);
 
-function processBinaryOperation(a, b, operator) {
+  payload = Number(payload);
+
+  if (state.currentOperand === 'A') {
+    state.operandA = calcNumber(state.operandA, payload);
+
+    state.display = state.operandA;
+  } else if (state.currentOperand === 'B') {
+    state.operandB = calcNumber(state.operandB, payload);
+
+    state.display = state.operandB;
+  }
+
+  return state;
+}
+
+function processBinaryOperator(oldState: CalcState, payload) {
+  const state = Object.assign({}, oldState);
+
+  if (state.operandA === null) {
+    return state;
+  }
+
+  if (state.operandA !== null && state.operandB === null) {
+    state.operator = payload;
+
+    state.currentOperand = 'B';
+    state.display = state.operandA;
+  }
+
+  if (state.operandA !== null && state.operandB !== null && state.operator !== null) {
+    state.operandA = calcBinaryOperation(state.operandA, state.operandB, state.operator);
+    state.operandB = null;
+    state.currentOperand = 'B';
+    state.display = state.operandA;
+  }
+
+  return state;
+}
+
+function processOperator(oldState: CalcState, payload) {
+  const state = Object.assign({}, oldState);
+
+  if (state.currentOperand === 'A') {
+    state.operandA = calcOperation(state.operandA, payload);
+
+    state.display = state.operandA;
+  } else if (state.currentOperand === 'B') {
+    state.operandB = calcOperation(state.operandB, payload);
+
+    state.display = state.operandB;
+  }
+
+  return state;
+}
+
+function processClear(oldState: CalcState) {
+  const state = Object.assign({}, oldState);
+
+  if (state.currentOperand === 'A') {
+    state.operandA = 0;
+
+    state.display = 0;
+  } else if (state.currentOperand === 'B') {
+    state.operandB = 0;
+
+    state.display = 0;
+  }
+
+  return state;
+}
+
+function processClearAll(oldState: CalcState) {
+  const state = Object.assign({}, oldState);
+
+  if (!state.enabled) {
+    state.enabled = true;
+    state.display = 0;
+
+    return state;
+  }
+
+  state.operandA = 0;
+  state.operandB = null;
+  state.operator = null;
+  state.display = 0;
+  state.currentOperand = 'A';
+
+  return state;
+}
+
+function processOff(oldState: CalcState) {
+  return Object.assign({}, oldState, defaultState);
+}
+
+function processResult(oldState: CalcState) {
+  const state = Object.assign({}, oldState);
+
+  if (!state.operator) {
+    return state;
+  }
+
+  state.operandA = calcBinaryOperation(state.operandA, state.operandB, state.operator);
+  state.operandB = null;
+  state.currentOperand = 'A';
+  state.display = state.operandA;
+  state.operator = null;
+
+  return state;
+}
+
+function calcBinaryOperation(a, b, operator) {
   switch (operator) {
     case 'plus':
       return a + b;
@@ -142,7 +178,7 @@ function processBinaryOperation(a, b, operator) {
   }
 }
 
-function processOperation(x, operator) {
+function calcOperation(x, operator) {
   switch (operator) {
     case 'sign':
       return x * -1;
@@ -152,6 +188,6 @@ function processOperation(x, operator) {
   }
 }
 
-function processNumber(x, number) {
+function calcNumber(x, number) {
   return x === null ? number : x * 10 + number;
 }
